@@ -157,12 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		el.dataset.type = type;
 		el.id = id;
 
-		// random position inside gameArea
+		// random position inside gameArea, door entities use fixed door positions instead
 		const rect = gameArea.getBoundingClientRect();
 		const w = Math.max(40, rect.width * 0.08);
 		const h = Math.max(40, rect.height * 0.08);
-		const x = Math.random() * (rect.width - w);
-		const y = Math.random() * (rect.height - h);
+		const x = type === 'door' ? 0 : Math.random() * (rect.width - w);
+		const y = type === 'door' ? 0 : Math.random() * (rect.height - h);
 		el.style.left = `${x}px`;
 		el.style.top = `${y}px`;
 
@@ -174,9 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			const map = {
 				alarm: 'alarmclock_on.png',
 				dog: 'dog_bark.png',
-				door: 'door_open.png',
+				door: 'door_closed.png',
 				fly: 'fly.png',
-				sandman: 'sandman.png'
+				sandman: 'sleeping_man.png'
 			};
 			return `images/${map[t] || 'New Piskel (6).png'}`;
 		}
@@ -228,19 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			}, 1400);
 		}
 
-		let doorResetTimer = null;
 		let doorLocked = false;
 		if (type === 'door') {
 			placeDoor(false);
-			doorResetTimer = setInterval(() => {
-				if (doorLocked) return;
-				doorLocked = true;
-				img.src = 'images/door_open.png';
-				window.setTimeout(() => {
-					placeDoor(false);
-					doorLocked = false;
-				}, 450);
-			}, 3600);
 		}
 
 		const endTime = Date.now() + lifetime;
@@ -254,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			el.remove();
 			clearTimeout(entityData.expire);
 			if (entityData.moveInt) clearInterval(entityData.moveInt);
-			if (entityData.doorResetTimer) clearInterval(entityData.doorResetTimer);
 			if (entityData.doorReopenTimer) clearTimeout(entityData.doorReopenTimer);
 			entities.delete(id);
 		}
@@ -265,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			el,
 			type,
 			moveInt,
-			doorResetTimer,
 			expire,
 			endTime,
 		};
@@ -280,12 +268,19 @@ document.addEventListener('DOMContentLoaded', () => {
 				doorLocked = true;
 				onEntityClick(type);
 				img.src = 'images/door_open.png';
-				clearTimeout(entityData.doorReopenTimer);
-				entityData.doorReopenTimer = window.setTimeout(() => {
+				window.setTimeout(() => {
 					if (!entities.has(id)) return;
-					placeDoor(false);
+					img.src = 'images/door_closed.png';
 					doorLocked = false;
 				}, 520);
+				return;
+			}
+			if (type === 'sandman') {
+				img.src = 'images/man_wakeup.png';
+				onEntityClick(type);
+				clearTimeout(entityData.expire);
+				if (entityData.moveInt) clearInterval(entityData.moveInt);
+				entityData.expire = setTimeout(cleanup, 300);
 				return;
 			}
 			onEntityClick(type);
@@ -313,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			case 'dog': sleepMeter.value = Math.max(0, Number(sleepMeter.value) - 15); break;
 			case 'door': sleepMeter.value = Math.max(0, Number(sleepMeter.value) - 12); break;
 			case 'fly': sleepMeter.value = Math.max(0, Number(sleepMeter.value) - 6); break;
-			case 'sandman': // if not clicked, sandman helps deepen sleep
-				sleepMeter.value = Math.min(sleepMeter.max || 100, Number(sleepMeter.value) + 18);
+		case 'sandman': // if not clicked, sandman helps deepen sleep
+			sleepMeter.value = Math.min(sleepMeter.max || 100, Number(sleepMeter.value) + 18);
 				break;
 		}
 		updateHUD();
