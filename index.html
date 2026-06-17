@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="lv">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Komanda1 — Spēle</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Komanda1</h1>
+		<p class="tagline">Sargi gulētāja miegu — noklikšķini traucēkļus!</p>
+	</header>
+
+	<main id="game-root">
+		<section id="hud">
+			<div class="hud-item">Laiks: <span id="time">00:00</span></div>
+			<div class="hud-item">Miegs: <meter id="sleepMeter" min="0" max="100" value="100"></meter></div>
+			<div class="hud-item">Rezultāts: <span id="score">0</span></div>
+		</section>
+
+		<section id="game-area" aria-label="Spēles laukums">
+			<!-- Vietturis spēles elementiem (traucēkļi, palīgi) -->
+			<div class="room-wall room-wall-back" aria-hidden="true"></div>
+			<div class="room-wall room-wall-side" aria-hidden="true"></div>
+			<div class="room-floor" aria-hidden="true"></div>
+			<div class="room-window" aria-hidden="true">
+				<div class="window-glow"></div>
+			</div>
+			<div class="wall-frame frame-a" aria-hidden="true"></div>
+			<div class="wall-frame frame-b" aria-hidden="true"></div>
+			<div class="ceiling-lamp" aria-hidden="true"></div>
+			<div class="room-door" aria-hidden="true">
+				<img src="images/door_closed.png" alt="">
+			</div>
+			<div class="shelf" aria-hidden="true">
+				<div class="shelf-books" aria-hidden="true"></div>
+				<div class="shelf-item shelf-mug" aria-hidden="true"></div>
+				<button id="alarmClock" class="stationary-entity alarm-standalone" type="button" aria-label="Modinātājs">
+					<img id="alarmClockImg" src="images/alarmclock_on.png" alt="modinātājs">
+					<span class="stationary-label">Modinātājs</span>
+				</button>
+			</div>
+			<div id="bed" aria-hidden="true">
+				<img src="images/sleeping_man.png" alt="guļošs cilvēks">
+			</div>
+		</section>
+
+		<section id="controls">
+			<button id="startBtn">Sākt spēli</button>
+			<button id="pauseBtn" disabled>Pause</button>
+		</section>
+
+		<section id="instructions">
+			<h2>Spēles norādījumi</h2>
+			<p>Tavs uzdevums ir pasargāt guļošas personas saldo miegu novācot visādus traucēkļus. Klikšķini uz traucēkļiem lai tos novāktu un saglabātu miegu.</p>
+			<ul>
+				<li><strong>Modinātājs</strong> - izslēdz, kad rāda 7:00</li>
+				<li><strong>Suns</strong> - noklikšķini, lai apklusinātu</li>
+				<li><strong>Durvis</strong> - aizver, kad atveras</li>
+				<li><strong>Muša</strong> - noklikšķini, lai nosistu</li>
+			</ul>
+		</section>
+	</main>
+
+	<footer>
+		<p>Avots: README — spēles ideja</p>
+	</footer>
+
+	<script src="script.js"></script>
+</body>
+</html>

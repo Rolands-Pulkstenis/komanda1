@@ -1,0 +1,482 @@
+:root{
+	--bg:#08111d;
+	--bg2:#14253f;
+	--panel:rgba(12,18,31,0.72);
+	--panel-border:rgba(255,255,255,0.08);
+	--accent:#8fd3ff;
+	--accent-strong:#f8c56c;
+	--text:#e7f0fb;
+	--muted:#9db1c9;
+	--shadow:0 18px 50px rgba(2,8,24,0.45);
+}
+
+*{box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,Arial,sans-serif}
+
+body{
+	margin:0;
+	min-height:100vh;
+	display:flex;
+	flex-direction:column;
+	color:var(--text);
+	background:
+		radial-gradient(circle at top left, rgba(143,211,255,0.18), transparent 28%),
+		radial-gradient(circle at 85% 15%, rgba(248,197,108,0.14), transparent 20%),
+		linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+header{padding:24px 20px 8px;text-align:center}
+h1{margin:0;font-size:clamp(2rem,4vw,3rem);letter-spacing:0.04em}
+.tagline{margin:8px 0 0;color:var(--accent);font-size:1rem}
+
+main#game-root{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;padding:16px 16px 8px;align-items:start;flex:1}
+#hud{display:flex;flex-direction:column;gap:10px;width:100%;position:sticky;top:16px}
+.hud-item{
+	background:var(--panel);
+	backdrop-filter:blur(12px);
+	border:1px solid var(--panel-border);
+	padding:12px 14px;
+	border-radius:16px;
+	box-shadow:var(--shadow);
+}
+
+#game-area{
+	min-height:520px;
+	background:
+		linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)),
+		radial-gradient(circle at 20% 20%, rgba(143,211,255,0.08), transparent 26%),
+		radial-gradient(circle at 80% 12%, rgba(248,197,108,0.08), transparent 22%),
+		rgba(4,10,22,0.68);
+	border:1px solid rgba(255,255,255,0.08);
+	border-radius:24px;
+	position:relative;
+	overflow:hidden;
+	box-shadow:var(--shadow);
+}
+
+#game-area .room-floor,
+#game-area .room-wall,
+#game-area .room-window,
+#game-area .wall-frame,
+#game-area .ceiling-lamp,
+#game-area .room-door,
+#game-area .shelf,
+#game-area #bed{
+	position:absolute;
+	pointer-events:none;
+}
+
+#game-area .room-floor{
+	left:0;
+	right:0;
+	bottom:0;
+	height:34%;
+	background:
+		radial-gradient(circle at 50% 10%, rgba(143,211,255,0.1), transparent 26%),
+		linear-gradient(180deg, rgba(10,17,31,0.2), rgba(6,12,22,0.55));
+	border-top:1px solid rgba(255,255,255,0.06);
+	z-index:0;
+}
+
+#game-area .room-wall{
+	inset:0;
+	border-radius:24px;
+	z-index:1;
+}
+
+#game-area .room-wall-back{
+	background:
+		linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015)),
+		linear-gradient(90deg, rgba(255,255,255,0.03) 0 49.5%, rgba(255,255,255,0.08) 49.5% 50.5%, rgba(255,255,255,0.03) 50.5% 100%),
+		rgba(11,20,38,0.32);
+	clip-path:polygon(0 0, 100% 0, 100% 78%, 0 78%);
+}
+
+#game-area .room-wall-side{
+	background:linear-gradient(180deg, rgba(143,211,255,0.06), rgba(248,197,108,0.03));
+	clip-path:polygon(76% 0, 100% 0, 100% 100%, 72% 100%);
+	opacity:0.9;
+}
+
+#game-area .room-wall::after{
+	content:"";
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:18%;
+	height:10px;
+	background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(143,211,255,0.12), rgba(255,255,255,0.05));
+	opacity:0.75;
+}
+
+#game-area .room-window{
+	left:26px;
+	top:38px;
+	width:168px;
+	height:128px;
+	border-radius:16px;
+	background:
+		linear-gradient(180deg, rgba(143,211,255,0.9), rgba(58,97,150,0.94)),
+		radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), transparent 18%),
+		radial-gradient(circle at 70% 45%, rgba(255,255,255,0.14), transparent 22%);
+	border:10px solid rgba(243,198,140,0.9);
+	box-shadow:0 18px 30px rgba(2,8,24,0.25);
+	overflow:hidden;
+	z-index:2;
+}
+
+#game-area .room-window::before,
+#game-area .room-window::after{
+	content:"";
+	position:absolute;
+	background:rgba(245,225,194,0.85);
+}
+
+#game-area .room-window::before{
+	left:50%;
+	top:0;
+	width:6px;
+	height:100%;
+	transform:translateX(-50%);
+}
+
+#game-area .room-window::after{
+	top:50%;
+	left:0;
+	width:100%;
+	height:6px;
+	transform:translateY(-50%);
+}
+
+#game-area .window-glow{
+	position:absolute;
+	inset:18px;
+	border-radius:12px;
+	background:
+		radial-gradient(circle at 65% 30%, rgba(255,255,255,0.5), transparent 20%),
+		radial-gradient(circle at 25% 75%, rgba(143,211,255,0.22), transparent 28%);
+	filter:blur(1px);
+}
+
+#game-area .wall-frame{
+	width:92px;
+	height:72px;
+	border-radius:14px;
+	padding:10px;
+	background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+	border:1px solid rgba(255,255,255,0.1);
+	box-shadow:0 10px 22px rgba(2,8,24,0.2);
+	z-index:2;
+}
+
+#game-area .wall-frame::before{
+	content:"";
+	display:block;
+	width:100%;
+	height:100%;
+	border-radius:10px;
+	background:linear-gradient(135deg, rgba(143,211,255,0.22), rgba(248,197,108,0.12));
+}
+
+#game-area .frame-a{right:160px;top:52px;transform:rotate(-4deg)}
+#game-area .frame-b{right:102px;top:150px;width:74px;height:58px;transform:rotate(6deg)}
+
+#game-area .ceiling-lamp{
+	left:50%;
+	top:0;
+	width:18px;
+	height:70px;
+	transform:translateX(-50%);
+	background:linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.1));
+	border-radius:0 0 999px 999px;
+	box-shadow:0 10px 20px rgba(2,8,24,0.18);
+	z-index:2;
+}
+
+#game-area .ceiling-lamp::before{
+	content:"";
+	position:absolute;
+	left:50%;
+	top:66px;
+	width:54px;
+	height:54px;
+	transform:translateX(-50%);
+	border-radius:50%;
+	background:radial-gradient(circle, rgba(248,197,108,0.4), rgba(248,197,108,0.08) 56%, transparent 70%);
+	filter:blur(1px);
+}
+
+#game-area .room-door,
+#game-area .shelf,
+#game-area #bed{z-index:3}
+
+#game-area .room-door{
+	right:28px;
+	top:86px;
+	width:112px;
+	height:182px;
+}
+
+#game-area .room-door img{
+	width:100%;
+	height:100%;
+	object-fit:contain;
+	display:block;
+	filter:drop-shadow(0 12px 18px rgba(2,8,24,0.35));
+}
+
+#game-area .shelf{
+	left:50%;
+	top:34px;
+	transform:translateX(-50%);
+	width:224px;
+	height:108px;
+	padding:12px 16px 10px;
+	border-radius:18px 18px 10px 10px;
+	background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+	border:1px solid rgba(255,255,255,0.08);
+	box-shadow:0 16px 28px rgba(1,6,18,0.2);
+	pointer-events:auto;
+}
+
+#game-area .shelf::after{
+	content:"";
+	position:absolute;
+	left:14px;
+	right:14px;
+	bottom:10px;
+	height:12px;
+	border-radius:999px;
+	background:linear-gradient(180deg, rgba(143,211,255,0.18), rgba(248,197,108,0.08));
+}
+
+#game-area .shelf-books{
+	position:absolute;
+	left:16px;
+	right:16px;
+	top:12px;
+	height:26px;
+	border-radius:10px;
+	background:
+		repeating-linear-gradient(90deg,
+			rgba(248,197,108,0.8) 0 12px,
+			rgba(143,211,255,0.75) 12px 24px,
+			rgba(255,255,255,0.35) 24px 30px,
+			transparent 30px 36px);
+	opacity:0.88;
+}
+
+#game-area .shelf-item{
+	position:absolute;
+	bottom:18px;
+	border-radius:50%;
+	background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(243,198,140,0.85));
+	box-shadow:0 8px 16px rgba(2,8,24,0.18);
+	pointer-events:none;
+}
+
+#game-area .shelf-mug{
+	right:18px;
+	width:24px;
+	height:24px;
+	border-radius:8px 8px 10px 10px;
+}
+
+#game-area .shelf-mug::before{
+	content:"";
+	position:absolute;
+	right:-6px;
+	top:6px;
+	width:8px;
+	height:10px;
+	border:2px solid rgba(243,198,140,0.9);
+	border-left:none;
+	border-radius:0 8px 8px 0;
+}
+
+#game-area .shelf .stationary-entity{
+	position:relative;
+	left:auto;
+	top:auto;
+	width:116px;
+	height:86px;
+	margin:0 auto;
+	z-index:1;
+	animation:alarmFloat 2.6s ease-in-out infinite;
+}
+
+#controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+#instructions{margin-top:16px;color:var(--muted)}
+#instructions ul{padding-left:18px}
+
+button{
+	background:linear-gradient(180deg, #bfe7ff, var(--accent));
+	border:none;
+	color:#041234;
+	padding:10px 14px;
+	border-radius:12px;
+	cursor:pointer;
+	font-weight:700;
+	box-shadow:0 10px 24px rgba(7,18,40,0.28);
+}
+
+button:disabled{opacity:0.5;cursor:default}
+footer{padding:12px 16px 20px;text-align:center;color:rgba(255,255,255,0.5)}
+
+.stationary-entity,
+.entity{
+	position:absolute;
+	width:86px;
+	height:86px;
+	border:none;
+	padding:0;
+	background:transparent;
+	border-radius:18px;
+	user-select:none;
+	transform:translateZ(0);
+	filter:drop-shadow(0 14px 20px rgba(2,8,24,0.4));
+	will-change:transform;
+}
+
+.entity{
+	cursor:pointer;
+	overflow:hidden;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	animation:entityEnter 260ms ease-out both;
+}
+
+.entity:hover{transform:translateY(-2px) scale(1.04)}
+.entity img.entity-img,
+.stationary-entity img{
+	width:100%;
+	height:100%;
+	object-fit:contain;
+	display:block;
+}
+
+.entity.alarm{animation:entityEnter 260ms ease-out both, alarmPulse 1.3s ease-in-out infinite}
+.entity.door{animation:entityEnter 260ms ease-out both}
+.entity.dog{animation:entityEnter 260ms ease-out both, dogBreathe 1.35s ease-in-out infinite}
+.entity.fly{animation:entityEnter 260ms ease-out both, flyFloat 1.6s ease-in-out infinite}
+.entity.sandman{animation:entityEnter 260ms ease-out both, sandFloat 1.6s ease-in-out infinite}
+
+.stationary-entity{
+	z-index:4;
+	width:118px;
+	height:118px;
+	cursor:pointer;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+	gap:2px;
+	padding:10px 10px 8px;
+	border-radius:22px;
+	background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
+	border:1px solid rgba(255,255,255,0.1);
+	backdrop-filter:blur(10px);
+	box-shadow:0 18px 36px rgba(1,6,18,0.42);
+	animation:alarmFloat 2.6s ease-in-out infinite;
+}
+
+.stationary-entity::before{
+	content:"";
+	position:absolute;
+	inset:8px;
+	border-radius:18px;
+	background:radial-gradient(circle, rgba(143,211,255,0.16), transparent 72%);
+	opacity:0.8;
+	pointer-events:none;
+}
+
+.stationary-entity img{
+	position:relative;
+	z-index:1;
+	max-width:86px;
+	max-height:70px;
+	filter:drop-shadow(0 10px 16px rgba(2,8,24,0.45));
+}
+
+.stationary-label{
+	position:relative;
+	z-index:1;
+	font-size:0.72rem;
+	letter-spacing:0.18em;
+	text-transform:uppercase;
+	color:var(--accent);
+	text-shadow:0 2px 8px rgba(2,8,24,0.7);
+}
+
+.alarm-off{
+	filter:grayscale(0.2) saturate(0.55) drop-shadow(0 14px 20px rgba(2,8,24,0.4));
+	animation:alarmFloat 2.6s ease-in-out infinite, alarmHit 420ms ease-out 1;
+}
+
+.alarm-flash{animation:alarmFlash 320ms ease-out 1}
+
+#bed{
+	right:12px;
+	bottom:8px;
+	width:250px;
+	height:162px;
+	z-index:3;
+	animation:bedGlow 3.2s ease-in-out infinite;
+}
+
+#bed img{
+	width:100%;
+	height:100%;
+	object-fit:contain;
+	display:block;
+	filter:drop-shadow(0 10px 22px rgba(2,6,23,0.6));
+}
+
+.game-overlay{
+	position:fixed;
+	inset:0;
+	background:rgba(2,6,23,0.7);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:1000;
+}
+
+.overlay-inner{
+	background:rgba(255,255,255,0.06);
+	padding:22px;
+	border-radius:18px;
+	text-align:center;
+	color:var(--text);
+	border:1px solid rgba(255,255,255,0.08);
+	box-shadow:var(--shadow);
+	backdrop-filter:blur(14px);
+}
+
+.overlay-inner button{margin-top:12px}
+
+@keyframes entityEnter{from{opacity:0;transform:translateY(10px) scale(0.88)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes alarmFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@keyframes alarmPulse{0%,100%{filter:drop-shadow(0 14px 20px rgba(2,8,24,0.4)) brightness(1)}50%{filter:drop-shadow(0 18px 24px rgba(143,211,255,0.45)) brightness(1.08)}}
+@keyframes alarmHit{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-2px) scale(1.06)}100%{transform:translateY(0) scale(1)}}
+@keyframes alarmFlash{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.1)}100%{transform:translateY(0) scale(1)}}
+@keyframes dogBreathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.03)}}
+@keyframes flyFloat{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(2px,-2px) rotate(8deg)}}
+@keyframes sandFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes bedGlow{0%,100%{filter:drop-shadow(0 10px 22px rgba(2,6,23,0.42))}50%{filter:drop-shadow(0 14px 26px rgba(143,211,255,0.16))}}
+
+@media (max-width: 900px){
+	main#game-root{grid-template-columns:1fr}
+	#hud{position:static;flex-direction:row;flex-wrap:wrap}
+	.hud-item{flex:1 1 180px}
+	#game-area{min-height:460px}
+	#game-area .room-window{width:132px;height:100px}
+	#game-area .room-door{right:16px;top:88px;width:92px;height:150px}
+	#game-area .shelf{width:188px;height:92px}
+	#game-area .shelf .stationary-entity{width:102px;height:76px}
+	#bed{width:170px;height:110px}
+}
+
+@media (prefers-reduced-motion: reduce){
+	*,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
+}
