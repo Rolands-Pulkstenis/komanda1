@@ -14,5 +14,4 @@ Tavs uzdevums ir pasargāt guļošas personas saldo miegu novācot visādus trau
 ### Palīgu veidi;
 * Sandman - Ja tu nenoklikšķini uz viņa, tad tavs miegs paliks dziļāks.
 
-### Kods:
-https://copilot.microsoft.com/shares/YQbfNHJiBUFQbqNhMLcsL
+### Koda uzvedne:
